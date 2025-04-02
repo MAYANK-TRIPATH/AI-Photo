@@ -8,11 +8,9 @@ export const enhanchedImageAPI = async (file: any) => {
         const taskId = await uploadImage(file);
         console.log("Image Upload SuccesFully, Task Id : ", taskId);
 
-        const enhancedImageData = await fetchEnhancedImage(taskId);
+        const enhancedImageData = await PollForEnhnaced(taskId);
         console.log("Enhance Image Data : ", enhancedImageData);
 
-        console.log(enhancedImageData);
-        return enhancedImageData;
 
 
     } catch (error) {
@@ -54,5 +52,20 @@ export const enhanchedImageAPI = async (file: any) => {
         return data.data;
     }
 
+    const PollForEnhnaced = async (taskId: any, retries = 0) => {
+        const result = await fetchEnhancedImage(taskId);
 
+        if (result?.status === 4) {
+            console.log("Processing...");
+
+            if (retries >= 20) {
+                throw new Error("Image Processing Timed Out");
+            }
+
+            // Wait for 2 seconds before Polling
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            return PollForEnhnaced(taskId, retries + 1);
+        }
+    }
 }
