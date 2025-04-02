@@ -2,7 +2,6 @@ import Loading from "./Loading";
 
 
 const ImagePreview = (props: any) => {
-    console.log(props);
     return (
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
 
@@ -32,7 +31,7 @@ const ImagePreview = (props: any) => {
                 </h2>
 
                 {props.enhanced && !props.loading && (
-                    <img src=""
+                    <img src={props.enhanced}
                         alt=""
                         className="w-full h-full object-cover"
                     />
